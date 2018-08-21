@@ -13,6 +13,9 @@ const styles = theme => ({
     "& a": {
       color: theme.base.colors.link
     },
+    "& img": {
+      maxWidth: "100%"
+    },
     "& .gatsby-highlight": {
       margin: "2em 0"
     },

@@ -39,7 +39,7 @@ const theme = createMuiTheme({
     fonts: {
       boxTitleSize: 1.3,
       boxTitleSizeM: 1.5,
-      boxTitleSizeL: 1.7
+      boxTitleSizeL: 1.4
     }
   },
   navigator: {

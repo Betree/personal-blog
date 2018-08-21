@@ -1,8 +1,8 @@
 {
-  "name": "gatsby-starter-personal-blog",
-  "description": "A Gatsby starter for a personal blog",
-  "author": "Greg Lobinski <greglobinski@gmail.com>",
-  "repository": "https://github.com/greglobinski/gatsby-starter-personal-blog",
+  "name": "benjamin-piouffle-personal-blog",
+  "description": "Benjamin Piouffle's personal blog",
+  "author": "Benjamin Piouffle <benjamin.piouffle@protonmail.ch>",
+  "repository": "https://github.com/Betree/personal-blog",
   "version": "1.1.1",
   "license": "MIT",
   "scripts": {
@@ -17,6 +17,7 @@
     "generate-app-icons": "sh ./scripts/generate-app-icons.sh"
   },
   "devDependencies": {
+    "@babel/runtime": "7.0.0-beta.55",
     "babel-eslint": "^8.2.6",
     "babel-plugin-dynamic-import-webpack": "^1.0.2",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",

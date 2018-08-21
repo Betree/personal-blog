@@ -2,4 +2,5 @@
 title: author
 ---
 
-**Mr. Gatsby** Proin ornare ligula eu tellus tempus elementum. Aenean [bibendum](/) iaculis mi, nec blandit lacus interdum vitae. Vestibulum non nibh risus, a scelerisque purus. :hearts:
+**Benjamin Piouffle** - Full-stack developer. Founder of [CaptainFact.io](https://captainfact.io).
+Graduated from Epitech (France). You can find my online resume at [https://benjamin.piouffle.com](https://benjamin.piouffle.com)
