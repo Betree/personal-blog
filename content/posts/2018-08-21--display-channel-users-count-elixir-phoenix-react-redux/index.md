@@ -1,17 +1,17 @@
 ---
 title: Display channel users count with Elixir/Phoenix + React/Redux
-subTitle: Implementing a users count feature using Phoenix Presence.
+subTitle: Implementing an anonymized and fast users count feature that can scale using Phoenix Presence.
 category: "elixir"
 cover: banner.png
 ---
 
 A few months ago, we decided to implement a users count feature on
 [CaptainFact](https://captainfact.io)'s videos pages. It had to be reliable,
-light and simple. We also wanted to differenciate between logged-in and anonymous users. 
+light and simple. We also wanted to differentiate between logged-in and anonymous users. 
 
 ![Banner](banner.png)
 
-The most intresting read I had at the time to start this was a
+The most interesting read I had at the time on this subject was a
 [medium article](https://medium.com/@pejrich/tracking-anonymous-unauthorized-users-with-elixir-phoenix-channels-and-presence-cfec1b93c1b0)
 which has one major flaw: the **full** users list is returned from the backend and the count
 occurs on the frontend (which actually respects the default behaviour of `Phoenix.Presence`).
@@ -20,7 +20,7 @@ Depending on your business, it can represent a privacy issue (you don't especial
 want anyone to be able to know who's connected to your channel) as well as a performance
 issue.
 
-In the follwing article, I'll show you how I implemented `Phoenix.Presence` in such a way that
+In the following article, I'll show you how I implemented `Phoenix.Presence` in such a way that
 it only returns the total of connected / anonymous users. We'll then see how it
 is binded to `Redux`.
 
@@ -30,6 +30,7 @@ is binded to `Redux`.
 
 The first thing you want to build this feature is to implement your own tracker:
 
+`lib/my_app_web/presence.ex`
 ```elixir
 defmodule MyAppWeb.Presence do
   @moduledoc """
@@ -73,6 +74,7 @@ end
 
 ### Add your new module to your app's supervisor
 
+`lib/my_app/application.ex`
 ```elixir
 defmodule MyApp.Application do
   use Application
@@ -98,6 +100,7 @@ we detect an authenticated channel by setting a `user_id` in the channel attribu
 
 Add the two following functions to the channel you want to track:
 
+`lib/my_app_web/channels/my_channel.ex`
 ```elixir
 @doc """
 Register a public connection in presence tracker
@@ -120,4 +123,94 @@ end
 defp push_presence_state(socket) do
   push(socket, "presence_state", Presence.list(socket))
 end
-```  
+```
+
+And that's it for the backend !
+
+## Frontend
+
+We know need to plug the channel presence messages to update our frontend. This
+example uses Redux, but you could easily transpose it for another store system.
+
+`app/state/presence/reducer.js`
+```javascript
+import { handleActions, createAction } from 'redux-actions'
+import { Record } from 'immutable'
+
+
+export const setPresence = createAction('PRESENCE/SET')
+export const presenceDiff = createAction('PRESENCE/DIFF')
+
+
+const INITIAL_STATE = new Record({
+  viewers: new Record({count: 0})(),
+  users: new Record({count: 0})(),
+})
+
+const PresenceReducer = handleActions({
+  [setPresence]: (state, {payload}) => state.merge(payload),
+  [presenceDiff]: (state, {payload: {leaves, joins}}) => {
+    return state.withMutations(record => record
+      .updateIn(['viewers', 'count'], x => {
+        return (x + joins.viewers.count) - leaves.viewers.count
+      })
+      .updateIn(['users', 'count'], x => {
+        return (x + joins.users.count) - leaves.users.count
+      })
+    )
+  }
+}, INITIAL_STATE())
+
+export default PresenceReducer
+```
+
+And the final binding on channel:
+
+`app/state/my_channel/effects.js`
+```javascript
+import { Socket } from 'phoenix'
+import { setPresence, presenceDiff } from '../my_channel/reducer'
+
+/**
+ * Effect to dispatch. Joins a channel 
+ */
+export const joinChannel = () => (dispatch) => {
+  const socket = new Socket(SOCKET_URL)
+  const channel = socket.channel("my_channel")
+  channel.on('presence_state')
+  channel.on('presence_diff')
+  channel.join()
+  return channel
+}
+```
+
+And voilà! Add a component to render this stuff:
+
+```jsx
+import React from 'react'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+
+
+const Presence = ({nbUsers, nbViewers}) => (
+  <div className="presence">
+    <div type="primary">
+      <span>{nbUsers} users</span>
+    </div>
+    <div className="viewers">
+      <span>{nbViewers} viewers</span>
+    </div>
+  </div>
+)
+
+Presence.propTypes = {
+  nbUsers: PropTypes.number.isRequired,
+  nbViewers: PropTypes.number.isRequired,
+}
+
+export default connect(mapStateToProps)(Presence)
+```
+
+And you'll end up with a nice anonimized and well-optimized counter:
+
+![Final Counter](counter.png) 
