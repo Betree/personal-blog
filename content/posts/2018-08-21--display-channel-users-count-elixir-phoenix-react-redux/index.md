@@ -21,8 +21,8 @@ want anyone to be able to know who's connected to your channel) as well as a per
 issue.
 
 In the following article, I'll show you how I implemented `Phoenix.Presence` in such a way that
-it only returns the total of connected / anonymous users. We'll then see how it
-is binded to `Redux`.
+it only returns the total of connected / anonymous users. We'll then see how to bind it
+to `Redux`.
 
 ## Backend
 
