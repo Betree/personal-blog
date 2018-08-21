@@ -1,6 +1,6 @@
 ---
 title: The urge for a collaborative, citizen fact-checking platform
-subTitle: The Internet has drawn us into strange places lately.
+subTitle: The Internet has drawn us into strange places lately. It has helped us to share information faster and at a larger scale, but it has also shown many weaknesses when it comes to verifying that information.
 category: "civic-tech"
 cover: banner-cover.jpg
 ---
