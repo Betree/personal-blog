@@ -28,7 +28,7 @@ to `Redux`.
 
 ### Implementing `Phoenix.Presence`
 
-The first thing you want to build this feature is to implement your own tracker:
+The first thing you want is to implement your own tracker:
 
 `lib/my_app_web/presence.ex`
 ```elixir
@@ -129,8 +129,8 @@ And that's it for the backend !
 
 ## Frontend
 
-We know need to plug the channel presence messages to update our frontend. This
-example uses Redux, but you could easily transpose it for another store system.
+We now need to plug the channel presence messages to update our frontend. This
+example uses Redux, but you can easily transpose it for another store system.
 
 `app/state/presence/reducer.js`
 ```javascript
@@ -191,6 +191,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+const mapStateToProps = {presence: {nbUsers, nbViewers}} => ({nbUsers, nbViewers})
 
 const Presence = ({nbUsers, nbViewers}) => (
   <div className="presence">
