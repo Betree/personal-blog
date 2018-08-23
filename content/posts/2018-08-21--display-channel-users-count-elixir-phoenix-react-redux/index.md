@@ -177,8 +177,8 @@ import { setPresence, presenceDiff } from '../my_channel/reducer'
 export const joinChannel = () => (dispatch) => {
   const socket = new Socket(SOCKET_URL)
   const channel = socket.channel("my_channel")
-  channel.on('presence_state')
-  channel.on('presence_diff')
+  channel.on('presence_state', presenceState => dispatch(setPresence(presenceState)))
+  channel.on('presence_diff', diff => dispatch(presenceDiff(diff)))
   channel.join()
   return channel
 }
