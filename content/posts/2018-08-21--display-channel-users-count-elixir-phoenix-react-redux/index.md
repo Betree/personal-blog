@@ -125,6 +125,15 @@ defp push_presence_state(socket) do
 end
 ```
 
+Then call these in you `join/3` function when it succeeds:
+
+```elixir
+def join("my_channel", _payload, socket) do
+  send(self(), :after_join)
+  {:ok, %{}, socket}
+end
+```
+
 And that's it for the backend !
 
 ## Frontend
