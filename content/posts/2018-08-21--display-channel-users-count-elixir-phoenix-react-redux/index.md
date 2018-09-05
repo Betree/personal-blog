@@ -224,3 +224,9 @@ export default connect(mapStateToProps)(Presence)
 And you'll end up with a nice anonimized and well-optimized counter:
 
 ![Final Counter](counter.png) 
+
+--------------------
+
+All CaptainFact's code is open-source (AGPL3). You can find the API code
+on https://github.com/CaptainFact/captain-fact-api and the frontend code
+on https://github.com/CaptainFact/captain-fact-frontend
